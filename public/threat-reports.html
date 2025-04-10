@@ -31,7 +31,26 @@
       });
 
       const data = await res.json();
-      resultDiv.textContent = `🔍 Result: ${data.result.toUpperCase()} (${data.source})`;
+      resultDiv.textContent = `${data.message} [Source: ${data.source}]`;
+
+      if (data.maliciousEngines && data.maliciousEngines.length) {
+  const list = document.createElement('ul');
+  data.maliciousEngines.forEach(entry => {
+    const li = document.createElement('li');
+    li.textContent = entry;
+    list.appendChild(li);
+  });
+  resultDiv.appendChild(list);
+}
+      else {
+        resultDiv.textContent = "No malicious engines detected.";
+      }
+      if (data.positive) {
+        resultDiv.style.color = 'green';
+      } else {
+        resultDiv.style.color = 'red';
+      } 
+
     });
   </script>
 </body>
