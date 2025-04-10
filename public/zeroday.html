@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zero-Day Lookup Tool</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+      color: #333;
+    }
+    h1 { color: #1f2937; }
+    input, button {
+      padding: 0.6rem 1rem;
+      margin-right: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .cve-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .severity {
+      font-weight: bold;
+      color: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Zero-Day Lookup Tool</h1>
+  <p>Enter CVE ID, vendor or product name:</p>
+  <input type="text" id="searchInput" placeholder="e.g., CVE-2024-1234 or Chrome">
+  <button onclick="searchCVE()">Search</button>
+
+  <div id="results"></div>
+
+  <script>
+    async function searchCVE() {
+      const query = document.getElementById('searchInput').value.trim();
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = "<p>🔎 Searching...</p>";
+
+      if (!query) return;
+
+      try {
+        const apiUrl = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${encodeURIComponent(query)}&isZeroDay=true`;
+
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        if (!data.vulnerabilities || data.vulnerabilities.length === 0) {
+          resultsContainer.innerHTML = "<p>✅ No zero-day vulnerabilities found for this search.</p>";
+          return;
+        }
+
+        // Show top 1 result
+        const vuln = data.vulnerabilities[0];
+        const cve = vuln.cve;
+
+        resultsContainer.innerHTML = `
+          <div class="result">
+            <div class="cve-title">🆔 ${cve.id}</div>
+            <p><strong>Description:</strong> ${cve.descriptions?.[0]?.value || "No description"}</p>
+            <p><strong>Published:</strong> ${cve.published}</p>
+            <p><strong>Last Modified:</strong> ${cve.lastModified}</p>
+            <p class="severity">CVSS: ${cve.metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore || "N/A"} (${cve.metrics?.cvssMetricV31?.[0]?.cvssData?.baseSeverity || "Unknown"})</p>
+            <p><strong>Patch Status:</strong> ${vuln.source?.patches?.length ? 'Patched' : 'Unpatched or unknown'}</p>
+          </div>
+        `;
+
+      } catch (err) {
+        console.error("Error fetching CVE:", err);
+        resultsContainer.innerHTML = "<p>❌ Something went wrong. Try again later.</p>";
+      }
+    }
+  </script>
+</body>
+</html>

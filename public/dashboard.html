@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CyberIntel Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f5;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #1f2937;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+      position: relative;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .icon {
+      font-size: 2rem;
+    }
+
+    .text-blue { color: #3b82f6; }
+    .text-green { color: #10b981; }
+    .text-purple { color: #8b5cf6; }
+    .text-red { color: #ef4444; }
+
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin: 0.25rem 0 0;
+    }
+
+    .btn {
+      margin-top: 1rem;
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      background-color: #3b82f6;
+      color: white;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      background-color: #2563eb;
+    }
+
+    .btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover::after {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navigation Bar -->
+  <nav>
+    <div><strong>CyberIntel Toolkit</strong></div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- ✅ Dashboard Cards -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-bell icon text-blue"></i>
+        <div>
+          <h2>Latest Threat Alerts</h2>
+          <p id="alertsText">Loading...</p>
+        </div>
+      </div>
+      <button class="btn" data-tooltip="See active alerts">View Alerts</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-file-alt icon text-green"></i>
+        <div>
+          <h2>Threat Reports</h2>
+          <p>Access detailed analysis and documents</p>
+        </div>
+      </div>
+      <button class="btn" data-tooltip="Open threat report list">View Reports</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-cloud-upload-alt icon text-purple"></i>
+        <div>
+          <h2>Upload Files</h2>
+          <p>Submit samples for threat detection</p>
+        </div>
+      </div>
+      <button class="btn" data-tooltip="Send file to analyzer">Upload Now</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-chart-bar icon text-red"></i>
+        <div>
+          <h2>Analytics</h2>
+          <p>Visualize threat trends and stats</p>
+        </div>
+      </div>
+      <button class="btn" data-tooltip="Go to analytics page">Go to Dashboard</button>
+    </div>
+  </div>
+  <script>
+    // Animate cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('visible');
+      }, index * 150);
+    });
+  
+    // Auto-refresh alert text every 5 seconds
+    function updateAlertText() {
+      const alertsText = document.getElementById('alertsText');
+      const newAlert = localStorage.getItem('latest_alert') || "No new alerts.";
+      alertsText.textContent = newAlert;
+    }
+  
+    updateAlertText(); // Load on first open
+    setInterval(updateAlertText, 5000); // Refresh every 5 sec
+</script>
+
+</body>
+</html>

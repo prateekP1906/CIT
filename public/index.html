@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CyberIntel Toolkit</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <h1>CyberIntel Toolkit</h1>
+    <nav class="nav-links">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#features">Features</a>
+      <a href="#reports">Reports</a>
+      <a href="#newsfeed">Newsfeed</a>
+      <a href="#uploads">Uploads</a>
+      <a href="#tools">API Tools</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <!-- ✅ Navigation Bar (Add this to your index.html too!) -->
+<nav>
+    <div>
+      <a href="index.html"></a>
+      <a href="dashboard.html">Main Dashboard</a>
+    </div>
+  </nav>  
+    <button id="menu-toggle" aria-label="Toggle Menu">☰</button>
+  </header>
+
+  <div class="mobile-menu hidden" id="mobile-menu">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#features">Features</a>
+    <a href="#reports">Reports</a>
+    <a href="#newsfeed">Newsfeed</a>
+    <a href="#uploads">Uploads</a>
+    <a href="#tools">API Tools</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <section class="hero">
+    <h2>Stay Ahead of Cyber Threats</h2>
+    <p>Your one-stop toolkit for threat intelligence, monitoring, and reporting.</p>
+    <button class="btn teal">Get Started</button>
+  </section>
+
+  <section id="dashboard" class="section dark">
+    <h3>Dashboard</h3>
+    <div class="grid">
+      <div class="card">Threat Feed Overview</div>
+      <div class="card">Recent Alerts</div>
+      <div class="card">System Health</div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <h3>Features</h3>
+    <div class="grid">
+      <div class="card">
+        <h4>Real-time Feeds</h4>
+        <p>Monitor IOCs live.</p>
+      </div>
+      <div class="card">
+        <h4>Threat Database</h4>
+        <p>Centralized threat info.</p>
+      </div>
+      <div class="card">
+        <h4>Visualization Tools</h4>
+        <p>Graph-based threat mapping.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="reports" class="section dark">
+    <h3>Reports</h3>
+    <p class="center">Generate, view, and download detailed incident and intelligence reports.</p>
+  </section> 
+  <section id="newsfeed" class="section">
+    <h3>Newsfeed</h3>
+    <ul class="newsfeed">
+      <li>New APT group identified targeting critical infrastructure.</li>
+      <li>Patch released for zero-day in major firewall appliance.</li>
+      <li>Open-source CTI feeds updated with new indicators.</li>
+    </ul>
+  </section>
+
+  <section id="uploads" class="section dark">
+    <h3>Uploaded Files</h3>
+    <form class="form-center">
+      <input type="file" />
+      <button class="btn teal" type="submit">Upload</button>
+    </form>
+  </section>
+
+  <section id="tools" class="section">
+    <h3>API Tools</h3>
+    <div class="api-tools">
+      <div>
+        <button class="btn blue" onclick="handleLookup('virustotal')">Check VirusTotal</button>
+        <pre id="vt-result" class="result-box"></pre>
+      </div>
+      <div>
+        <button class="btn purple" onclick="handleLookup('metadefender')">Check MetaDefender</button>
+        <pre id="md-result" class="result-box"></pre>
+      </div>
+      <div>
+        <button class="btn red" onclick="handleLookup('shodan')">Search Shodan</button>
+        <pre id="shodan-result" class="result-box"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <h3>Contact Us</h3>
+    <form class="form-center">
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Your Email" />
+      <textarea rows="4" placeholder="Your Message"></textarea>
+      <button class="btn teal" type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <footer class="footer">
+    &copy; 2025 CyberIntel Toolkit. All rights reserved.
+  </footer>
+  <script>
+  const simulateBtn = document.getElementById("simulateAlertBtn");
+  const alertStatus = document.getElementById("alertStatus");
+  const toast = document.getElementById("toast");
+
+  simulateBtn.addEventListener("click", () => {
+    const alerts = [
+      "🚨 Zero-day vulnerability found in Apache!",
+      "⚠️ Ransomware spreading via phishing emails!",
+      "🔒 New exploit kit detected targeting routers!",
+      "🕵️‍♂️ Nation-state APT group activity increased!",
+      "📦 Malicious package uploaded to npm registry!"
+    ];
+    const randomAlert = alerts[Math.floor(Math.random() * alerts.length)];
+    localStorage.setItem("latest_alert", randomAlert);
+
+    // Show toast
+    toast.textContent = `✅ New Alert: ${randomAlert}`;
+    toast.style.opacity = 1;
+    toast.style.transform = "translateY(0)";
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+      toast.style.opacity = 0;
+      toast.style.transform = "translateY(20px)";
+    }, 3000);
+
+    // Also show confirmation text
+    alertStatus.textContent = "✅ Alert simulated! Open the dashboard to view it.";
+  });
+ </script>
+  <script>src="script.js"</script>
+  <!-- ✅ Toast Notification -->
+<div id="toast" style="
+position: fixed;
+bottom: 20px;
+right: 20px;
+background-color: #323232;
+color: white;
+padding: 1rem 1.5rem;
+border-radius: 10px;
+font-size: 0.9rem;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+opacity: 0;
+transform: translateY(20px);
+transition: opacity 0.4s ease, transform 0.4s ease;
+z-index: 999;
+">
+🚨 Alert Simulated!
+</div>
+</body>
+</html>
