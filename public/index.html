@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CyberIntel Toolkit</title>
   <link rel="stylesheet" href="styles.css" />
+  
 </head>
 <body>
   <header class="navbar">
@@ -47,9 +48,8 @@
   <section id="dashboard" class="section dark">
     <h3>Dashboard</h3>
     <div class="grid">
-      <div class="card">Threat Feed Overview</div>
-      <div class="card">Recent Alerts</div>
-      <div class="card">System Health</div>
+      <a href="threat-reports.html" class="card btn teal" target="_blank">🧪 Threat Reports</a>
+      <a href="zeroday.html" class="card btn blue" target="_blank">⚡ Zero-Day Lookup</a>
     </div>
   </section>
 
@@ -154,7 +154,7 @@
     alertStatus.textContent = "✅ Alert simulated! Open the dashboard to view it.";
   });
  </script>
-  <script>src="script.js"</script>
+  <script src="script.js"></script>
   <!-- ✅ Toast Notification -->
 <div id="toast" style="
 position: fixed;
