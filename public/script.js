@@ -7,7 +7,7 @@ document.getElementById("menu-toggle").addEventListener("click", () => {
     try {
       const response = await fetch(`/api/${apiName}`);
       const data = await response.json();
-      document.getElementById(`${apiName === "virustotal" ? "vt" : apiName === "metadefender" ? "md" : "shodan"}-result`).textContent = JSON.stringify(data, null, 2);
+      document.getElementById(`${apiName === "virustotal" ? "vt" : apiName === "Virustotal" ? "md" : "shodan"}-result`).textContent = JSON.stringify(data, null, 2);
     } catch (err) {
       alert("Error fetching API data.");
       console.error(err);

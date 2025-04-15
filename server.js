@@ -6,6 +6,8 @@ const axios = require('axios');
 const FormData = require('form-data');
 const app = express();
 const PORT = 3000;
+const { OpenAI } = require('openai');
+const bodyParser = require('body-parser');
 
 
 // Serve static files

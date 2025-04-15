@@ -57,7 +57,7 @@
       if (!query) return;
 
       try {
-        const apiUrl = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${encodeURIComponent(query)}&isZeroDay=true`;
+        const apiUrl = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${encodeURIComponent(query)}`;
 
         const res = await fetch(apiUrl);
         const data = await res.json();
@@ -81,12 +81,11 @@
             <p><strong>Patch Status:</strong> ${vuln.source?.patches?.length ? 'Patched' : 'Unpatched or unknown'}</p>
           </div>
         `;
-
-      } catch (err) {
-        console.error("Error fetching CVE:", err);
-        resultsContainer.innerHTML = "<p>❌ Something went wrong. Try again later.</p>";
-      }
+    } catch (err) {
+      console.error("Error fetching CVE:", err);
+      resultsContainer.innerHTML = "<p>❌ Something went wrong. Try again later.</p>";
     }
+  }
   </script>
 </body>
 </html>
