@@ -2,18 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Threat Reports</title>
+  <title>Threat Report Scanner</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    .status { margin-top: 1rem; font-weight: bold; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fce4ec);
+      color: #1a202c;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #d81b60;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      border-left: 5px solid #d81b60;
+    }
+
+    input[type="file"] {
+      font-size: 1rem;
+      border: 2px dashed #ba68c8;
+      border-radius: 10px;
+      padding: 1rem;
+      background-color: #f3e5f5;
+      color: #6a1b9a;
+      transition: border-color 0.3s;
+    }
+
+    input[type="file"]:focus {
+      border-color: #6a1b9a;
+      outline: none;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      background-color: #3949ab;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+      align-self: flex-start;
+    }
+
+    button:hover {
+      background-color: #283593;
+    }
+
+    .status {
+      margin-top: 2rem;
+      font-size: 1.05rem;
+      padding: 1.2rem;
+      border-radius: 12px;
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .status.success {
+      background-color: #d0f0c0;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+    }
+
+    .status.error {
+      background-color: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #c62828;
+    }
+
+    ul {
+      margin-top: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    ul li {
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+      color: #e53935;
+    }
   </style>
 </head>
 <body>
-  <h1>🧪 Upload Threat Report</h1>
+
+  <h1>🧪 Upload & Scan Threat File</h1>
+
   <form id="uploadForm">
     <input type="file" name="file" required />
     <button type="submit">Upload & Analyze</button>
   </form>
+
   <div class="status" id="resultStatus"></div>
 
   <script>
@@ -23,35 +114,44 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
+      resultDiv.className = 'status';
       resultDiv.textContent = "⏳ Uploading and analyzing...";
 
-      const res = await fetch('/analyze', {
-        method: 'POST',
-        body: formData
-      });
+      try {
+        const res = await fetch('/analyze', {
+          method: 'POST',
+          body: formData
+        });
 
-      const data = await res.json();
-      resultDiv.textContent = `${data.message} [Source: ${data.source}]`;
+        const data = await res.json();
 
-      if (data.maliciousEngines && data.maliciousEngines.length) {
-  const list = document.createElement('ul');
-  data.maliciousEngines.forEach(entry => {
-    const li = document.createElement('li');
-    li.textContent = entry;
-    list.appendChild(li);
-  });
-  resultDiv.appendChild(list);
-}
-      else {
-        resultDiv.textContent = "No malicious engines or service detected.";
+        if (data.result === 'malicious') {
+          resultDiv.classList.add("error");
+        } else if (data.result === 'clean') {
+          resultDiv.classList.add("success");
+        }
+
+        resultDiv.innerHTML = `${data.message} <br><strong>Source:</strong> ${data.source}`;
+
+        if (data.maliciousEngines && data.maliciousEngines.length) {
+          const list = document.createElement('ul');
+          data.maliciousEngines.forEach(entry => {
+            const li = document.createElement('li');
+            li.textContent = entry;
+            list.appendChild(li);
+          });
+          resultDiv.appendChild(list);
+        } else {
+          resultDiv.innerHTML += "<p>No malicious engines or services detected.</p>";
+        }
+
+      } catch (err) {
+        console.error(err);
+        resultDiv.className = 'status error';
+        resultDiv.textContent = "❌ Something went wrong while uploading or analyzing.";
       }
-      if (data.positive) {
-        resultDiv.style.color = 'green';
-      } else {
-        resultDiv.style.color = 'red';
-      } 
-
     });
   </script>
+
 </body>
 </html>
